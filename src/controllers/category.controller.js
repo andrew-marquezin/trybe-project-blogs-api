@@ -8,6 +8,13 @@ const requestAddCat = async (req, res) => {
   return res.status(201).json(response);
 };
 
+const requestFindAll = async (req, res) => {
+  const response = await categoryService.findAll();
+
+  return res.status(200).json(response);
+};
+
 module.exports = {
   requestAddCat,
+  requestFindAll,
 };

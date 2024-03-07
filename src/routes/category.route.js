@@ -4,5 +4,6 @@ const authenticateJWT = require('../middlewares/authenticateJWT');
 const { checkCatName } = require('../middlewares/inputValidation');
 
 route.post('/', authenticateJWT, checkCatName, categoryController.requestAddCat);
+route.get('/', authenticateJWT, categoryController.requestFindAll);
 
 module.exports = route;
