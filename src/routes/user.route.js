@@ -15,5 +15,6 @@ route.post(
   userController.requestAddUser,
 );
 route.get('/', authenticateJWT, userController.requestAll);
+route.get('/:id', authenticateJWT, userController.requestById);
 
 module.exports = route;
