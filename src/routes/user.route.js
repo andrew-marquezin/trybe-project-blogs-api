@@ -1,4 +1,5 @@
 const route = require('express').Router();
+const authenticateJWT = require('../middlewares/authenticateJWT');
 const { userController } = require('../controllers');
 const {
   checkRegisteredEmail,
@@ -13,5 +14,6 @@ route.post(
   checkRegisteredEmail,
   userController.requestAddUser,
 );
+route.get('/', authenticateJWT, userController.requestAll);
 
 module.exports = route;
