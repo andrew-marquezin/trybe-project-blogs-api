@@ -25,29 +25,32 @@ const addNewPost = async ({ title, content, categoryIds }, userId) => {
 
 const findAll = async () => {
   const response = await BlogPost.findAll({
-    include: [
-      { model: User, as: 'user', attributes: { exclude: ['password'] } },
-      { model: Category, as: 'categories' },
-    ],
+    include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories' }],
   });
-
   return response;
 };
 
 const findById = async (id) => {
   const response = await BlogPost.findOne({
     where: { id },
-    include: [
-      { model: User, as: 'user', attributes: { exclude: ['password'] } },
-      { model: Category, as: 'categories' },
-    ],
+    include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories' }],
   });
-
   return response;
+};
+
+const updatePost = async (id, { title, content }) => {
+  const response = await BlogPost.update({ title, content }, { where: { id } });
+
+  if (response[0] === 1) return findById(id);
+  
+  return null;
 };
 
 module.exports = {
   addNewPost,
   findAll,
   findById,
+  updatePost,
 };

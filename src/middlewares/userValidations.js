@@ -1,5 +1,5 @@
 // const { User } = require('../models');
-const { userService } = require('../services');
+const { userService, blogPostService } = require('../services');
 const { emailSchema } = require('./schemas/schema');
 
 const validateName = async (req, res, next) => {
@@ -37,8 +37,20 @@ const checkRegisteredEmail = async (req, res, next) => {
   next();
 };
 
+const checkPostOwner = async (req, res, next) => {
+  const postId = req.params.id;
+  const userId = req.user.dataValues.id;
+
+  const post = await blogPostService.findById(postId);
+
+  if (post.userId !== userId) return res.status(401).json({ message: 'Unauthorized user' });
+
+  next();
+};
+
 module.exports = {
   validateName,
   validatePassword,
   checkRegisteredEmail,
+  checkPostOwner,
 };
