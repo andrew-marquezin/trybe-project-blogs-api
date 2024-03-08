@@ -5,7 +5,7 @@ const {
   checkRegisteredEmail,
   validateName,
   validatePassword,
-} = require('../middlewares/postUserValidations');
+} = require('../middlewares/userValidations');
 
 route.post(
   '/', 
