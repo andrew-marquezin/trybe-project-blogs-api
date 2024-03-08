@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const config = require('../config/config');
-const { BlogPost, PostCategory } = require('../models');
+const { BlogPost, PostCategory, User, Category } = require('../models');
 
 const env = process.env.NODE_ENV || 'development';
 const sequelize = new Sequelize(config[env]);
@@ -12,7 +12,7 @@ const addNewPost = async ({ title, content, categoryIds }, userId) => {
     const newPost = await BlogPost.create({
       title, content, userId, updated: date, published: date,
     }, { transaction: t });
-    
+
     const insertCategories = categoryIds.map((categoryId) => (
       { postId: newPost.id, categoryId }
     ));
@@ -23,6 +23,31 @@ const addNewPost = async ({ title, content, categoryIds }, userId) => {
   return response.dataValues;
 };
 
+const findAll = async () => {
+  const response = await BlogPost.findAll({
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories' },
+    ],
+  });
+
+  return response;
+};
+
+const findById = async (id) => {
+  const response = await BlogPost.findOne({
+    where: { id },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories' },
+    ],
+  });
+
+  return response;
+};
+
 module.exports = {
   addNewPost,
+  findAll,
+  findById,
 };
